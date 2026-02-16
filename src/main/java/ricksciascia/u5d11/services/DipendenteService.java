@@ -70,4 +70,9 @@ public class DipendenteService {
         Dipendente trovato = this.findById(idDipendente);
         this.dipendenteRepository.delete(trovato);
     }
+
+    public Dipendente findByEmail(String email) {
+        return this.dipendenteRepository.findByEmail(email)
+                .orElseThrow(()-> new NotFoundException("L'utente con email: "+ email + " non è registrato!"));
+    }
 }
