@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ricksciascia.u5d11.entities.Dipendente;
+import ricksciascia.u5d11.exceptions.UnauthorizedException;
 
 import java.util.Date;
 
@@ -23,13 +24,22 @@ public class JWTTools {
                 .expiration(new Date(System.currentTimeMillis()+1000*60*60*24*7))
 //                a chi appartiene (soggetto) no info personali
                 .subject(String.valueOf(dipendente.getId()))
-//                firma del token, uso algoritmo di firma digitale hmacSha
+//                firma del token, uso algoritmo di firma digitale "hmacSha"
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
 //                conclusione
                 .compact();
     }
-    public void verifyToken() {
+    public void verifyToken(String token) {
 //        metodo parser per leggere token
-
+        try{
+            Jwts.parser()
+//                devo verificare con stesso algoritmo che ho usato come firma digitale prima "hmacSha"
+                    .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                    .build().parse(token);
+//        questo ci lancia delle eccezzioni diverse che dobbiamo raccogliere per lanciare in caso un unica eccezione
+//        quindi avvolgere il tutto in un try catch che poi in caso lancerà un unica eccezione gestita la UnauthorizedException code: 401
+        } catch(Exception ex) {
+            throw new UnauthorizedException("Problemi con il token, effettuare il login nuovamente!");
+        }
     }
 }

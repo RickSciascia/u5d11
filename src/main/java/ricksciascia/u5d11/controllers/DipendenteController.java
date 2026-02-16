@@ -23,22 +23,22 @@ public class DipendenteController {
         this.dipendenteService = dipendenteService;
     }
 
-//    POST
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Dipendente creaDipendente(@RequestBody @Validated DipendenteDTO payload, BindingResult validationResult) {
-//        validazione payload
-        if(validationResult.hasErrors()) {
-//        trasformo la Lista di FieldError che mi fornisce il validationResult in una Lista di Stringhe tramite i Java Stream con Map e toList
-            List<String> listaErrori = validationResult.getFieldErrors()
-                    .stream().map(fieldError -> fieldError.getDefaultMessage())
-                    .toList();
-
-            throw new ValException(listaErrori);
-        } else {
-            return this.dipendenteService.saveDipendente(payload);
-        }
-    }
+////    POST
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Dipendente creaDipendente(@RequestBody @Validated DipendenteDTO payload, BindingResult validationResult) {
+////        validazione payload
+//        if(validationResult.hasErrors()) {
+////        trasformo la Lista di FieldError che mi fornisce il validationResult in una Lista di Stringhe tramite i Java Stream con Map e toList
+//            List<String> listaErrori = validationResult.getFieldErrors()
+//                    .stream().map(fieldError -> fieldError.getDefaultMessage())
+//                    .toList();
+//
+//            throw new ValException(listaErrori);
+//        } else {
+//            return this.dipendenteService.saveDipendente(payload);
+//        }
+//    }
 //    GET
     @GetMapping
     public Page<Dipendente> getAll(@RequestParam(defaultValue = "0") int page,
