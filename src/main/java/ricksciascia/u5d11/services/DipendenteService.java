@@ -27,7 +27,7 @@ public class DipendenteService {
             throw new BadReqException("L'email " + dipendente.getEmail() + " è già registrata");
         });
 //        creo dipendente
-        Dipendente dipendenteDaSalvare = new Dipendente(payload.username(), payload.nome(), payload.cognome(), payload.email());
+        Dipendente dipendenteDaSalvare = new Dipendente(payload.username(), payload.nome(), payload.cognome(), payload.email(), payload.password());
 //        salvo e ritorno il dipendente
         Dipendente salvato = this.dipendenteRepository.save(dipendenteDaSalvare);
         return salvato;

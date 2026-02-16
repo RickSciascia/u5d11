@@ -2,6 +2,7 @@ package ricksciascia.u5d11.payloads;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record DipendenteDTO(
@@ -16,5 +17,8 @@ public record DipendenteDTO(
         String cognome,
         @NotBlank(message = "Il campo email è obbligatorio")
         @Email(message = "L'indirizzo email non è nel formato corretto, controlla la presenza di @")
-        String email) {
+        String email,
+        @NotBlank
+        @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "La password deve contenere almeno una maiuscola, minuscola, numero ed essere minimo di 8 caratteri")
+        String password) {
 }
