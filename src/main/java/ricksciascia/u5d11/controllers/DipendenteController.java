@@ -3,6 +3,7 @@ package ricksciascia.u5d11.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +56,7 @@ public class DipendenteController {
 
 //    PUT
     @PutMapping("/{idDipendente}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Dipendente editDipendente(@RequestBody @Validated DipendenteDTO payload, BindingResult validationResult, @PathVariable long idDipendente) {
 
         if(validationResult.hasErrors()) {
@@ -72,6 +74,7 @@ public class DipendenteController {
 //    DELETE
     @DeleteMapping("/{idDipendente}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDipendente(@PathVariable long idDipendente) {
         this.dipendenteService.deleteById(idDipendente);
     }

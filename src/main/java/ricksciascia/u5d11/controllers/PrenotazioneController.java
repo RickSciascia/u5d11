@@ -2,6 +2,7 @@ package ricksciascia.u5d11.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ public class PrenotazioneController {
 //    POST
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ADMIN')")
+//    solo gli utenti amministratori possono fare Post per creare nuova prenotazione
     public Prenotazione creaPrenotazione(@RequestBody @Validated PrenotazioneDTO payload, BindingResult validationResult) {
         if(validationResult.hasErrors()) {
             List<String> listaErrori = validationResult.getFieldErrors()

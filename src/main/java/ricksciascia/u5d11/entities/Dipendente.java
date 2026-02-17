@@ -5,13 +5,19 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "dipendenti")
 @NoArgsConstructor
 @Setter
 @Getter
-public class Dipendente {
+public class Dipendente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
@@ -28,6 +34,8 @@ public class Dipendente {
     private String avatar;
     @Column(nullable = false)
     private String password;
+    @Enumerated(EnumType.STRING)
+    private Ruolo ruolo;
 
 
     public Dipendente(String username, String nome,String cognome, String email, String password) {
@@ -37,6 +45,8 @@ public class Dipendente {
         this.email = email;
         this.password = password;
         this.avatar = "https://ui-avatars.com/api/?name=" + nome + "+" + cognome;
+//        imposto di Default che un dipendente appena registrato sarà un utente semplice
+        this.ruolo = Ruolo.UTENTE;
     }
 
     @Override
@@ -50,4 +60,14 @@ public class Dipendente {
                 ", avatar='" + avatar + '\'' +
                 '}';
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        METODO che restituisce una collezione di Autorities ovvero i ruoli, nel nostro caso solo 1 (ma ne potrebbe avere anche più di uno)
+//        SimpleGrantedAuthority è una classe del pacchetto Security che crea oggetti ruolo che sono compatibili con questo metodo che deve ritornare una collection
+//        Al suo interno passo il ruolo attraverso il metodo .name() del Enum
+        return List.of(new SimpleGrantedAuthority(this.ruolo.name()));
+    }
+
+
 }

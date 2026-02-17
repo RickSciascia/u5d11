@@ -32,7 +32,7 @@ public class AuthController {
         return new LoginResponseDTO(this.authService.checkCredentialsAndGenerateToken(payload));
     }
 
-    //    POST NEW DIPENDETE
+    //    POST NEW DIPENDENTE
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Dipendente creaDipendente(@RequestBody @Validated DipendenteDTO payload, BindingResult validationResult) {

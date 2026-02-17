@@ -42,4 +42,16 @@ public class JWTTools {
             throw new UnauthorizedException("Problemi con il token, effettuare il login nuovamente!");
         }
     }
+
+
+    public long extractIdFromToken(String token) {
+//        devo leggere il token quindi sempre come per la verifica metodo .parser() su Jwts con .verifyWith() segreto con algoritmo hmacSha stessa cosa del verify il tutto avvolto da Long.parseLong
+        return Long.parseLong(Jwts.parser()
+                .verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+                .build()
+//                qui prendo strada diversa leggo il contenuto delle Claims tra cui subject, expiration
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject());
+    }
 }
