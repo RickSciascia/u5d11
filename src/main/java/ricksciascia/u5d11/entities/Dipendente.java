@@ -1,5 +1,6 @@
 package ricksciascia.u5d11.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,6 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonIgnoreProperties({"password","ruolo","authorities","credentialsNonExpired","enabled","accountNonExpired","accountNonLocked"})
+//@JsonIgnoreProperties serve a togliere quelle proprietà tipo password etc. dal payload delle GET che non dovrebbe MAI essere trasmesso!
 public class Dipendente implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
