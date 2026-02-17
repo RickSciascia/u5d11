@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ricksciascia.u5d11.entities.Dipendente;
 import ricksciascia.u5d11.exceptions.BadReqException;
@@ -15,10 +16,12 @@ import ricksciascia.u5d11.repositories.DipendenteRepository;
 @Service
 public class DipendenteService {
     private final DipendenteRepository dipendenteRepository;
+    private final PasswordEncoder bcryptEncoder;
 
     @Autowired
-    public DipendenteService(DipendenteRepository dipendenteRepository) {
+    public DipendenteService(DipendenteRepository dipendenteRepository, PasswordEncoder bcryptEncoder) {
         this.dipendenteRepository = dipendenteRepository;
+        this.bcryptEncoder = bcryptEncoder;
     }
 
     public Dipendente saveDipendente(DipendenteDTO payload) {
@@ -27,7 +30,7 @@ public class DipendenteService {
             throw new BadReqException("L'email " + dipendente.getEmail() + " è già registrata");
         });
 //        creo dipendente
-        Dipendente dipendenteDaSalvare = new Dipendente(payload.username(), payload.nome(), payload.cognome(), payload.email(), payload.password());
+        Dipendente dipendenteDaSalvare = new Dipendente(payload.username(), payload.nome(), payload.cognome(), payload.email(), bcryptEncoder.encode(payload.password()));
 //        salvo e ritorno il dipendente
         Dipendente salvato = this.dipendenteRepository.save(dipendenteDaSalvare);
         return salvato;
